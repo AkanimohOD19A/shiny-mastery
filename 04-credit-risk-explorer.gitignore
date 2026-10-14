@@ -1,0 +1,4 @@
+# Local database — regenerate with data-raw/build_db.R
+data/portfolio.db
+data/*.db
+data/*.sqlite

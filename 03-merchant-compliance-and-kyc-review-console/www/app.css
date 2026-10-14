@@ -1,0 +1,56 @@
+/* Stack children in the right column naturally */
+.detail-col > .card,
+.detail-col > .box,
+.detail-col > .tabBox,
+.detail-col > .case-detail-wrap,
+.detail-col > .case-detail-wrap > .tabBox {
+  position: relative !important;
+}
+.detail-col > .tab-content {
+  position: relative !important;
+  margin-bottom: 1rem;
+}
+
+/* Stop bs4Dash cards from absolutely positioning when not in a box() */
+.detail-col > * {
+  display: block;
+  width: 100%;
+}
+
+/* Keep the queue column from stretching when the detail column is tall */
+.queue-col {
+  align-self: flex-start;
+}
+
+/* Bulk action bar */
+.bulk-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+/* Case header strip */
+.case-header {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #dee2e6;
+  margin-bottom: 0.75rem;
+}
+.case-header h4 {
+  margin: 0 0 0.25rem 0;
+}
+.badge.tier-critical { background: #7f1d1d; color: #fff; }
+.badge.tier-high     { background: #b45309; color: #fff; }
+.badge.tier-medium   { background: #0e7490; color: #fff; }
+.badge.tier-low      { background: #166534; color: #fff; }
+.badge {
+  display: inline-block;
+  padding: 0.15rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}

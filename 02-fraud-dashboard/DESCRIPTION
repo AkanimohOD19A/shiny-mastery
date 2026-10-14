@@ -1,0 +1,21 @@
+Package: frauddashboard
+Title: Real-Time Transaction Fraud Monitoring Dashboard
+Version: 0.1.0
+Authors@R: person("Analyst", "Team", email = "danielamahtoday@gmail.com", role = c("aut", "cre"))
+Description: A Shiny dashboard for streaming fraud risk signals, alerting
+    thresholds, and analyst triage workflow.
+License: MIT
+Encoding: UTF-8
+Imports:
+    shiny,
+    DT,
+    dplyr,
+    future,
+    promises,
+    lubridate
+Suggests:
+    testthat (>= 3.0.0),
+    shinytest2,
+    profvis,
+    usethis
+Config/testthat/edition: 3

@@ -1,0 +1,24 @@
+# Cross-project
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+
+# R build artifacts
+*.Rcheck/
+*.tar.gz
+
+# Local databases — regenerate from seed scripts
+*.db
+*.sqlite
+*.sqlite3
+*.duckdb
+
+# renv libraries (each project's own .gitignore also covers these)
+**/renv/library/
+**/renv/staging/
+**/renv/local/
+**/renv/cellar/
+**/renv/lock/
+**/renv/python/
+**/renv/sandbox/

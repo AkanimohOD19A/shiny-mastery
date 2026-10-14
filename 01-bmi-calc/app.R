@@ -159,7 +159,7 @@ server <- function(input, output, session) {
   output$bmi_reference <- renderTable({
     data.frame(
       Category = c("Underweight", "Normal", "Overweight", "Obese"),
-      BMI_Range = c("< 18.5", "18.5???24.9", "25???29.9", "??? 30"),
+      BMI_Range = c("< 18.5", "18.5 - 24.9", "25 - 29.9", ">= 30"),
       Risk = c("Increased", "Least", "Increased", "High"),
       stringsAsFactors = FALSE
     )
