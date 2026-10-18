@@ -20,27 +20,40 @@ ui <- page_sidebar(
     mod_whatif_ui("whatif")
   ),
   
+  # 1. KPIs - NO WRAPPER NEEDED. The module handles the 4 columns.
   mod_kpis_ui("kpis"),
+  
   br(),
+  
+  # 2. Vintage Curves Card (Added width=1 and fill=TRUE)
   card(
+    width = 1,
+    fill = TRUE,
     card_header("Vintage Performance"),
     mod_vintage_curves_ui("curves")
   ),
+  
   br(),
+  
+  # 3. Loan Drill-Down Card (Added width=1 and fill=TRUE)
   card(
+    width = 1,
+    fill = TRUE,
     card_header("Loan Drill-Down"),
-    tableOutput("loan_sample")
+    DT::DTOutput("loan_sample")
   )
 )
 
 # server
 server <- function(input, output, session) {
   con <- reactiveVal(db_connect())
-  session$onSessionEnded(function() dbDisconnect(con()))
+  
+  session$onSessionEnded(function(){
+    if (!is.null(con())) dbDisconnect(con())
+  })
   
   filters <- mod_filters_server("filters")
   
-  # Build the WHERE clause + params once, share with everything downstream
   filter <- reactive({
     req(filters$vintage(), filters$product(),
         filters$region(), filters$tier())
@@ -48,13 +61,18 @@ server <- function(input, output, session) {
                         filters$region(),  filters$tier())
   })
   
-  kpis <- reactive({ db_portfolio_kpis(con(), filter()) })
+  kpis <- reactive({ 
+    req(filter())
+    db_portfolio_kpis(con(), filter()) 
+  })
   
   mod_kpis_server("kpis", kpis)
   mod_vintage_curves_server("curves", con(), filter)
   mod_whatif_server("whatif", kpis)
   
-  output$loan_sample <- renderTable({
+  # Changed to DT renderer so the table actually shows up!
+  output$loan_sample <- DT::renderDataTable({
+    req(filter())
     db_loan_sample(con(), filter(), limit = 200)
   })
 }
