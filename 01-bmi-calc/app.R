@@ -138,7 +138,7 @@ server <- function(input, output, session) {
   output$bmi_value <- renderText({
     bmi_data()$bmi %>%
       round(1) %>%
-      paste("kg/m??")
+      paste("kg/m\u00b2")
   })
   
   # Output: BMI category with color coding
@@ -149,7 +149,7 @@ server <- function(input, output, session) {
   # Output: Full assessment
   output$health_assessment <- renderPrint({
     data <- bmi_data()
-    cat("BMI:", round(data$bmi, 1), "kg/m??\n")
+    cat("BMI:", round(data$bmi, 1), "kg/m\u00b2\n")
     cat("Category:", data$category, "\n")
     cat("Ideal weight range:", data$ideal_weight_range, "\n")
     cat("\nRecommendation:\n", data$recommendation)

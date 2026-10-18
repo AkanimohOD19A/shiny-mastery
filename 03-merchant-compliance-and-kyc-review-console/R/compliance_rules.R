@@ -129,6 +129,10 @@ validate_decision <- function(case_row, decision, note) {
     return(list(ok = FALSE,
                 reason = "Case is already decided. Open a new review cycle."))
   }
+  if (!case_row$status %in% c("assigned", "deferred")) {
+    return(list(ok = FALSE,
+                reason = "Assign the case before recording a decision"))
+  }
   if (decision == "approve" && isTRUE(case_row$sanctions_hit)) {
     return(list(ok = FALSE,
                 reason = "Cannot approve while a sanctions hit is open"))
@@ -159,8 +163,8 @@ next_status <- function(from_status, action) {
     "deferred|decide"                = "decided",
     "decided|reopen"                 = "new"
   )
-  out <- table[[key]]
-  if (is.null(out)) {
+  out <- unname(table[key])
+  if (is.na(out)) {
     stop(sprintf("Illegal transition: %s + %s", from_status, action))
   }
   out

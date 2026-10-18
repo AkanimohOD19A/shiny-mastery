@@ -1,4 +1,4 @@
-#' Risk Scoring Module ??? UI
+#' Risk Scoring Module - UI
 #' @param id namespace
 mod_risk_scoring_ui <- function(id) {
   ns <- NS(id)
@@ -9,7 +9,7 @@ mod_risk_scoring_ui <- function(id) {
   )
 }
 
-#' Risk Scoring Module ??? Server
+#' Risk Scoring Module - Server
 #'
 #' @param id namespace
 #' @param transactions reactive returning a data.frame of new transactions
@@ -29,7 +29,7 @@ mod_risk_scoring_server <- function(id, transactions) {
       }) %...>% (function(result) {
         scored(result)
       }) %...!% (function(err) {
-        # Fail gracefully ??? log and expose error state
+        # Fail gracefully - log and expose error state
         scored(list(error = TRUE, message = conditionMessage(err)))
       })
     })

@@ -1,7 +1,7 @@
 #' Score a single transaction
 score_one <- function(amount, velocity_5m, is_international) {
-  base <- pmin(amount / 1000, 40)              # 0???40
-  vel  <- pmin(velocity_5m * 4, 40)            # 0???40
+  base <- pmin(amount / 1000, 40)              # 0-40
+  vel  <- pmin(velocity_5m * 4, 40)            # 0-40
   intl <- if (is_international) 20 else 0      # 0 or 20
   round(pmin(base + vel + intl, 100))
 }

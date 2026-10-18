@@ -34,4 +34,15 @@ test_that("validate_decision rejects short notes and decided cases", {
 test_that("cannot approve while sanctions hit is open", {
   cr <- list(status = "assigned", sanctions_hit = TRUE,
              sla_state = "ok", risk_tier = "high")
-  v <- validate_decision(cr
+  v <- validate_decision(cr, "approve", "justification ok here")
+  expect_false(v$ok)
+  expect_match(v$reason, "sanctions")
+})
+
+test_that("a decision needs an assigned case", {
+  cr <- list(status = "new", sanctions_hit = FALSE,
+             sla_state = "ok", risk_tier = "low")
+  v <- validate_decision(cr, "reject", "justification ok here")
+  expect_false(v$ok)
+  expect_match(v$reason, "Assign the case")
+})

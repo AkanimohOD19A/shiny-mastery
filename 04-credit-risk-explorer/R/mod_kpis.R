@@ -33,8 +33,8 @@ mod_kpis_server <- function(id, kpis) {
                                         format(round(kpis()$total_balance / 1e6, 1), 
                                                big.mark = ","), "M"))
     output$dpd30   <- renderText(paste0(
-      round(100 * kpis()$n_dpd_30 / (kpis()$n_loans * 12), 2), "%"))
+      round(100 * kpis()$n_dpd_30 / kpis()$n_loan_months, 2), "%"))
     output$co      <- renderText(paste0(
-      round(100 * kpis()$n_charge_off / (kpis()$n_loans * 12), 2), "%"))
+      round(100 * kpis()$n_charge_off / kpis()$n_loan_months, 2), "%"))
   })
 }

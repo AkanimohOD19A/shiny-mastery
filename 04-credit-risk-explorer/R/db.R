@@ -50,7 +50,7 @@ build_filter_clause <- function(vintages, products, regions, tiers) {
   )
 }
 
-#' Portfolio KPIs ??? one query, aggregated in SQL.
+#' Portfolio KPIs - one query, aggregated in SQL.
 db_portfolio_kpis <- function(con, filter) {
   sql <- sprintf("
         SELECT
@@ -74,19 +74,25 @@ db_portfolio_kpis <- function(con, filter) {
                                 FROM loans l %s", filter$sql),
                 params = filter$params)
   
+  # Balance = latest snapshot per loan (not the sum over every month);
+  # rates are events per loan-month.
   b <- db_query(con, sprintf("
-        SELECT SUM(p.balance) AS total_balance,
-               SUM(p.dpd_30)    AS n_dpd_30,
-               SUM(p.dpd_90)    AS n_dpd_90,
-               SUM(p.charge_off) AS n_charge_off
-        FROM performance p JOIN loans l ON l.loan_id = p.loan_id
+        SELECT SUM(CASE WHEN p.months_on_book = m.max_mob THEN p.balance END) AS total_balance,
+               SUM(p.dpd_30)     AS n_dpd_30,
+               SUM(p.dpd_90)     AS n_dpd_90,
+               SUM(p.charge_off) AS n_charge_off,
+               COUNT(*)          AS n_loan_months
+        FROM performance p
+        JOIN loans l ON l.loan_id = p.loan_id
+        JOIN (SELECT loan_id, MAX(months_on_book) AS max_mob
+              FROM performance GROUP BY loan_id) m ON m.loan_id = p.loan_id
         %s", filter$sql),
                 params = filter$params)
   
   cbind(a, b)
 }
 
-#' Vintage curves ??? delinquency rate by vintage x months_on_book.
+#' Vintage curves - delinquency rate by vintage x months_on_book.
 #' This is the core analytic. Aggregated entirely in SQL.
 db_vintage_curves <- function(con, filter, metric = "dpd_30") {
   metric <- match.arg(metric, c("dpd_30", "dpd_90", "charge_off"))
@@ -95,7 +101,7 @@ db_vintage_curves <- function(con, filter, metric = "dpd_30") {
             strftime('%%Y-Q' || ((CAST(strftime('%%m', l.vintage) AS INTEGER)-1)/3 + 1),
                      l.vintage)          AS vintage_label,
             p.months_on_book,
-            SUM(p.%)s * 1.0 / COUNT(*) AS rate
+            SUM(p.%s) * 1.0 / COUNT(*) AS rate
         FROM performance p
         JOIN loans l ON l.loan_id = p.loan_id
         %s

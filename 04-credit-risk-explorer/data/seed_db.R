@@ -20,7 +20,7 @@ max_mob      <- 36                            # months on book to simulate
 # ---- Loans table ----
 loans <- data.frame(
   loan_id       = sprintf("LN-%06d", 1:n_loans),
-  vintage       = sample(vintages, n_loans, replace = TRUE),
+  vintage       = as.character(sample(vintages, n_loans, replace = TRUE)),
   product       = sample(products, n_loans, replace = TRUE,
                          prob = c(0.40, 0.25, 0.25, 0.10)),
   region        = sample(regions, n_loans, replace = TRUE),
@@ -55,8 +55,8 @@ perf <- do.call(rbind, lapply(seq_len(nrow(loans)), function(i) {
   l  <- loans[i, ]
   # How many months has this loan been on book as of today?
   mob_end <- min(max_mob,
-                 as.integer(as.numeric(as.Date("2024-12-31"),
-                                     l$vintage, units = "days") %/% 30))
+                 as.integer(difftime(as.Date("2024-12-31"), as.Date(l$vintage),
+                                     units = "days")) %/% 30L)
   if (mob_end < 1) return(NULL)
   
   mob <- 1:mob_end

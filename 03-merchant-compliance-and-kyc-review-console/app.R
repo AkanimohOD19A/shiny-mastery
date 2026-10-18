@@ -92,9 +92,11 @@ server <- function(input, output, session) {
                   action, before, conditionMessage(e)),
           type = "warning", duration = 5
         )
-        before
+        NULL
       }
     )
+    # Illegal transition: change nothing and write nothing to the audit trail
+    if (is.null(after)) return(invisible(FALSE))
     
     df$status[i] <- after
     if (action == "assign")       df$assigned_to[i] <- user
@@ -115,6 +117,7 @@ server <- function(input, output, session) {
       action = action, before_state = before, after_state = after,
       note = note
     ))
+    invisible(TRUE)
   }
   
   mod_case_detail_server("detail", case_row)

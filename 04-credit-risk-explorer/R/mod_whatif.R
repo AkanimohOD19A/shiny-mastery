@@ -20,7 +20,7 @@ mod_whatif_ui <- function(id) {
 
 mod_whatif_server <- function(id, kpis) {
   moduleServer(id, function(input, output, session) {
-    # Heavy compute runs only on button click ??? deliberately NOT reactive
+    # Heavy compute runs only on button click - deliberately NOT reactive
     scenario <- eventReactive(input$recompute, {
       base <- kpis()
       # Proportion of loans above the FICO cutoff (approximate via normal CDF)

@@ -43,7 +43,7 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
-  # Simulated live stream ??? replace with real feed
+  # Simulated live stream - replace with real feed
   transactions <- reactivePoll(
     intervalMillis = 2000,
     session = session,

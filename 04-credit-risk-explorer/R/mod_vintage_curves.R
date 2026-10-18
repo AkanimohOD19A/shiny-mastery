@@ -28,7 +28,7 @@ mod_vintage_curves_server <- function(id, con, filter) {
               color = ~vintage_label, type = "scatter", mode = "lines",
               hovertemplate = "MOB %{x}<br>Rate %{y:.2%}<extra></extra>") %>%
         layout(
-          title = "Vintage Curves ??? Cumulative Rate by Months on Book",
+          title = "Vintage Curves - Rate by Months on Book",
           xaxis = list(title = "Months on Book"),
           yaxis = list(title = "Rate", tickformat = ".1%"),
           legend = list(title = list(text = "Vintage"))

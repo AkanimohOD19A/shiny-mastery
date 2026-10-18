@@ -42,10 +42,18 @@ mod_action_panel_server <- function(id, case_row, current_user,
         decision(NULL)
         return()
       }
-      on_decision(case_id = cr$case_id,
-                  decision = d,
-                  note = input$note,
-                  user = current_user())
+      ok <- on_decision(case_id = cr$case_id,
+                        decision = d,
+                        note = input$note,
+                        user = current_user())
+      if (isFALSE(ok)) {
+        output$validation_msg <- renderUI({
+          div(class = "alert alert-warning mt-2",
+              "Not recorded: the case could not make that transition.")
+        })
+        decision(NULL)
+        return()
+      }
       output$validation_msg <- renderUI({
         div(class = "alert alert-success mt-2",
             sprintf("Recorded: %s", d))
